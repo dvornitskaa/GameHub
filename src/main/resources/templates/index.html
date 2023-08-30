@@ -5,14 +5,32 @@
     <title>Title</title>
 </head>
 <body>
-<a th:href="@{/exit}" >
-    <span>Hello</span>
-</a>
+<form th:action="@{/exit}" method="get">
+    <input name="userName" />
+    <button type="submit" >Hello</button>
+</form>
 <a th:href="@{/hay}" >
     <p >
     </p>
     <span>How are you</span>
 </a>
+
+<h1>Развернуть слово</h1>
+<form action="/reverse" method="post">
+    <input type="text" name="inputReversible" placeholder="Введите слово">
+    <button type="submit">Развернуть</button>
+</form>
+<div>
+    Результат: <span th:text="${reversedWord}"></span>
+</div>
+<form action="/remember" method="post">
+    <input type="text" name="inputRememberable" placeholder="Введите слово для запоминания">
+    <button type="submit">Запомнить</button>
+</form>
+
+<div>
+    Слово для запоминания: <span th:text="${rememberedWord}"></span>
+</div>
 
 </body>
 
