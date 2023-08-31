@@ -9,6 +9,14 @@
     <h1>Вторая страница</h1>
     <p>Вы угадали или тип того.</p>
     <a th:href="@{/}">Вернуться назад</a>
+    <h1>Введите число</h1>
+    <form action="/fibonacci" method="post">
+        <input type="number" name="inputNumber" placeholder="Введите число">
+        <button type="submit">Проверить</button>
+    </form>
+    <div>
+        Результат: <span th:text="${message}"></span>
+    </div>
 </div>
 </body>
 </html>

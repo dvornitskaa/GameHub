@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Third</title>
+</head>
+<body>
+<div class="container">
+    <h1>Cтраница с еденицами</h1>
+    <a th:href="@{/}">Вернуться на главную страницу</a>
+    <div>
+        Результат: <span th:text="${firstNumber}"></span>
+    </div>
+    <div>
+        Результат: <span th:text="${secondNumber}"></span>
+    </div>
+    <form action="/increase" method="post">
+        <button type="submit">Кнопка</button>
+    </form>
+
+</div>
+
+</body>
+</html>
