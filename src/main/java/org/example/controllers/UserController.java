@@ -20,11 +20,6 @@ public class UserController {
     private UserService userService;
     private String rememberedWord = "";
     private String reversedWord = "";
-    private Integer numberFibonacci = 0;
-    private String message = "";
-    private boolean boolFibonacci = false;
-    private Integer randomIncrement = 1;
-    private Integer maxNumber = 1;
 
 
     @GetMapping("exit")
@@ -53,7 +48,6 @@ public class UserController {
         reversedWord = userService.reversedWord(inputReversible);
         model.addAttribute("reversedWord", reversedWord);
         model.addAttribute("rememberedWord", rememberedWord);
-        model.addAttribute("message", message);
         if (inputReversible.equals(rememberedWord)) {
             return "secondPage";
         }
@@ -68,49 +62,27 @@ public class UserController {
 
     @PostMapping("/fibonacci")
     public String fibonacci(Integer inputNumber, Model model) {
-        numberFibonacci = inputNumber;
-        List<Integer> listFibonacci = new ArrayList<>();
-        listFibonacci.add(0);
-        listFibonacci.add(1);
-        int i = 2;
-        while (true) {
-            listFibonacci.add(listFibonacci.get(i - 1) + listFibonacci.get(i - 2));
-            if (Objects.equals(numberFibonacci, listFibonacci.get(i))) {
-                message = "Да, это число Фибоначчи";
-                boolFibonacci = true;
-                return "redirect:/thirdPage";
-                //break;
-            }
-            if (numberFibonacci < listFibonacci.get(i)) {
-                message = "Нет, это не число Фибоначчи";
-                break;
-            }
-            i++;
+        boolean isFibonacci = userService.fibonacciOrNot(inputNumber);
+        if (isFibonacci) {
+            return "redirect:/thirdPage";
         }
-        model.addAttribute("message", message);
+        model.addAttribute("message", "Нет, это не число Фибоначчи");
         return "secondPage";
     }
 
     @GetMapping("/thirdPage")
     public String thirdPage(Model model) {
-        model.addAttribute("randomIncrement", randomIncrement);
-        model.addAttribute("maxNumber", maxNumber);
+        model.addAttribute("randomIncrement", userService.getRandomIncrement());
+        model.addAttribute("maxNumber", userService.getMaxNumber());
         return "thirdPage";
     }
 
 
     @PostMapping("/increase")
     public String increase(Model model) {
-        if (Math.random() >= 0.5) {
-            randomIncrement++;
-        } else {
-            randomIncrement = 1;
-        }
-        if (randomIncrement > maxNumber) {
-            maxNumber = randomIncrement;
-        }
-        model.addAttribute("randomIncrement", randomIncrement);
-        model.addAttribute("maxNumber", maxNumber);
+        userService.incrementRandom();
+        model.addAttribute("randomIncrement", userService.getRandomIncrement());
+        model.addAttribute("maxNumber", userService.getMaxNumber());
         return "thirdPage";
     }
 
