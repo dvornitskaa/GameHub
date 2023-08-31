@@ -9,10 +9,10 @@
     <h1>Cтраница с еденицами</h1>
     <a th:href="@{/}">Вернуться на главную страницу</a>
     <div>
-        Результат: <span th:text="${firstNumber}"></span>
+         <span th:text="${randomIncrement}"></span>
     </div>
     <div>
-        Результат: <span th:text="${secondNumber}"></span>
+         <span th:text="${maxNumber}"></span>
     </div>
     <form action="/increase" method="post">
         <button type="submit">Кнопка</button>

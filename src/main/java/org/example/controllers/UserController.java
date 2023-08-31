@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 //@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -34,8 +35,8 @@ public class UserController {
     private Integer numberFibonacci = 0;
     private String message = "";
     private boolean boolFibonacci = false;
-    private Integer firstNumber = 1;
-    private Integer secondNumber = 1;
+    private Integer randomIncrement = 1;
+    private Integer maxNumber = 1;
 
 
     @GetMapping("/")
@@ -66,14 +67,13 @@ public class UserController {
     @PostMapping("/fibonacci")
     public String fibonacci(Integer inputNumber, Model model) {
         numberFibonacci = inputNumber;
-
-
         List<Integer> listFibonacci = new ArrayList<>();
         listFibonacci.add(0);
         listFibonacci.add(1);
-        for (int i = 2; i < 10000; i++) {
+        int i=2;
+        while (true){
             listFibonacci.add(listFibonacci.get(i - 1) + listFibonacci.get(i - 2));
-            if (numberFibonacci == listFibonacci.get(i)) {
+            if (Objects.equals(numberFibonacci, listFibonacci.get(i))) {
                 message = "Да, это число Фибоначчи";
                 boolFibonacci = true;
                 return "redirect:/thirdPage";
@@ -83,6 +83,7 @@ public class UserController {
                 message = "Нет, это не число Фибоначчи";
                 break;
             }
+            i++;
         }
         model.addAttribute("message", message);
         return "secondPage";
@@ -90,8 +91,8 @@ public class UserController {
 
     @GetMapping("/thirdPage")
     public String thirdPage(Model model) {
-        model.addAttribute("firstNumber", firstNumber);
-        model.addAttribute("secondNumber", secondNumber);
+        model.addAttribute("randomIncrement", randomIncrement);
+        model.addAttribute("maxNumber", maxNumber);
         return "thirdPage";
     }
 
@@ -99,15 +100,15 @@ public class UserController {
     @PostMapping("/increase")
     public String increase(Model model) {
         if (Math.random() >= 0.5) {
-            firstNumber++;
+            randomIncrement++;
         } else {
-            firstNumber = 1;
+            randomIncrement = 1;
         }
-        if (firstNumber > secondNumber) {
-            secondNumber = firstNumber;
+        if (randomIncrement > maxNumber) {
+            maxNumber = randomIncrement;
         }
-        model.addAttribute("firstNumber", firstNumber);
-        model.addAttribute("secondNumber", secondNumber);
+        model.addAttribute("randomIncrement", randomIncrement);
+        model.addAttribute("maxNumber", maxNumber);
         return "thirdPage";
     }
 
