@@ -1,5 +1,7 @@
 package org.example.controllers;
 
+import org.example.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -14,22 +16,8 @@ import java.util.Objects;
 @Controller
 //@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class UserController {
-    //    @GetMapping
-//    public String greeting(){
-//        return "index.html";
-//    }
-//    @GetMapping("exit")
-//    public String parting(Model model, @RequestParam String userName){
-//        if (userName.equals("Denis")){
-//            userName = "teacher";
-//        }
-//        model.addAttribute("name", userName);
-//        return "bye.html";
-//    }
-//    @GetMapping("hay")
-//    public String howAreYou(){
-//        return "hay.html";
-//    }
+    @Autowired
+    private UserService userService;
     private String rememberedWord = "";
     private String reversedWord = "";
     private Integer numberFibonacci = 0;
@@ -38,6 +26,20 @@ public class UserController {
     private Integer randomIncrement = 1;
     private Integer maxNumber = 1;
 
+
+    @GetMapping("exit")
+    public String parting(Model model, @RequestParam String userName) {
+        if (userName.equals("Denis")) {
+            userName = "teacher";
+        }
+        model.addAttribute("name", userName);
+        return "bye.html";
+    }
+
+    @GetMapping("hay")
+    public String howAreYou() {
+        return "hay.html";
+    }
 
     @GetMapping("/")
     public String index(Model model) {
@@ -48,7 +50,7 @@ public class UserController {
 
     @PostMapping("/reverse")
     public String reverse(String inputReversible, Model model) {
-        reversedWord = new StringBuilder(inputReversible).reverse().toString();
+        reversedWord = userService.reversedWord(inputReversible);
         model.addAttribute("reversedWord", reversedWord);
         model.addAttribute("rememberedWord", rememberedWord);
         model.addAttribute("message", message);
@@ -70,8 +72,8 @@ public class UserController {
         List<Integer> listFibonacci = new ArrayList<>();
         listFibonacci.add(0);
         listFibonacci.add(1);
-        int i=2;
-        while (true){
+        int i = 2;
+        while (true) {
             listFibonacci.add(listFibonacci.get(i - 1) + listFibonacci.get(i - 2));
             if (Objects.equals(numberFibonacci, listFibonacci.get(i))) {
                 message = "Да, это число Фибоначчи";
