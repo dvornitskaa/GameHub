@@ -87,13 +87,7 @@ public class UserController {
         model.addAttribute("maxNumber", userService.getMaxNumber());
         return "thirdPage";
     }
-    @PostMapping("/complex")
-    public String complex(Double realNumber1, Double imagineNumber1, Double realNumber2, Double imagineNumber2, @RequestParam("submit_button") ComplexOperations submitButton, Model model){
 
-        String resultOfOperation = userService.arithmeticOperationWithComplexNumbers(realNumber1, imagineNumber1, realNumber2, imagineNumber2, submitButton);
-        model.addAttribute("resultOfOperation", resultOfOperation);
-        return "index";
-    }
 
 
 }

@@ -13,5 +13,5 @@ public interface UserServiceI {
     Integer getRandomIncrement();
 
     Integer getMaxNumber();
-    String arithmeticOperationWithComplexNumbers(Double realNumber1, Double imagineNumber1, Double realNumber2, Double imagineNumber2, ComplexOperations nameOfOperation);
+
 }
