@@ -1,5 +1,6 @@
 package org.example.controllers;
 
+import org.example.enums.ComplexOperations;
 import org.example.services.UserService;
 import org.example.services.UserServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,9 +88,9 @@ public class UserController {
         return "thirdPage";
     }
     @PostMapping("/complex")
-    public String complex(Double realNumber1, Double imagineNumber1, Double realNumber2, Double imagineNumber2, @RequestParam("submit_button") String submitButton, Model model){
-        String nameOfOperation = submitButton;
-        String resultOfOperation = userService.arithmeticOperationWithComplexNumbers(realNumber1, imagineNumber1, realNumber2, imagineNumber2, nameOfOperation);
+    public String complex(Double realNumber1, Double imagineNumber1, Double realNumber2, Double imagineNumber2, @RequestParam("submit_button") ComplexOperations submitButton, Model model){
+
+        String resultOfOperation = userService.arithmeticOperationWithComplexNumbers(realNumber1, imagineNumber1, realNumber2, imagineNumber2, submitButton);
         model.addAttribute("resultOfOperation", resultOfOperation);
         return "index";
     }
