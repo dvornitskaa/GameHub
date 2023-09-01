@@ -1,6 +1,7 @@
 package org.example.controllers;
 
 import org.example.services.UserService;
+import org.example.services.UserServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -17,7 +18,7 @@ import java.util.Objects;
 //@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class UserController {
     @Autowired
-    private UserService userService;
+    private UserServiceI userService;
     private String rememberedWord = "";
     private String reversedWord = "";
 
@@ -84,6 +85,13 @@ public class UserController {
         model.addAttribute("randomIncrement", userService.getRandomIncrement());
         model.addAttribute("maxNumber", userService.getMaxNumber());
         return "thirdPage";
+    }
+    @PostMapping("/complex")
+    public String complex(Double realNumber1, Double imagineNumber1, Double realNumber2, Double imagineNumber2, @RequestParam("submit_button") String submitButton, Model model){
+        String nameOfOperation = submitButton;
+        String resultOfOperation = userService.arithmeticOperationWithComplexNumbers(realNumber1, imagineNumber1, realNumber2, imagineNumber2, nameOfOperation);
+        model.addAttribute("resultOfOperation", resultOfOperation);
+        return "index";
     }
 
 

@@ -26,10 +26,28 @@
 <form action="/remember" method="post">
     <input type="text" name="inputRememberable" placeholder="Введите слово для запоминания">
     <button type="submit">Запомнить</button>
+
 </form>
+
+
 
 <div>
     Слово для запоминания: <span th:text="${rememberedWord}"></span>
+</div>
+<h1>Действия с комплексными числами</h1>
+<form action="/complex" method="post">
+    <input type="number" name="realNumber1" placeholder="Реальная часть первого числа">
+    <input type="number" name="imagineNumber1" placeholder="Мнимая часть первого числа">
+    <input type="number" name="realNumber2" placeholder="Реальная часть второго числа">
+    <input type="number" name="imagineNumber2" placeholder="Мнимая часть второго числа">
+    <button type="submit" name="submit_button" value="addition">Сложение</button>
+    <button type="submit" name="submit_button" value="subtraction">Вычетание</button>
+    <button type="submit" name="submit_button" value="multiplication">Умножение</button>
+    <button type="submit" name="submit_button" value="division">Деление</button>
+
+</form>
+<div>
+    Результат <span th:text="${resultOfOperation}"></span>
 </div>
 
 </body>

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
-public class UserService implements UserServiceI{
+public class UserService implements UserServiceI {
     private Integer randomIncrement = 1;
     private Integer maxNumber = 1;
 
@@ -18,6 +18,7 @@ public class UserService implements UserServiceI{
     public Integer getMaxNumber() {
         return maxNumber;
     }
+
 
     public String reversedWord(String inputReversible) {
         return new StringBuilder(inputReversible).reverse().toString();
@@ -51,5 +52,44 @@ public class UserService implements UserServiceI{
         if (randomIncrement > maxNumber) {
             maxNumber = randomIncrement;
         }
+    }
+
+    @Override
+    public String arithmeticOperationWithComplexNumbers(Double realNumber1, Double imagineNumber1, Double realNumber2, Double imagineNumber2, String nameOfOperation) {
+        StringBuilder res = new StringBuilder("");
+        Double realNumberRes = 0.0;
+        Double imagineNumberRes = 0.0;
+        if (nameOfOperation.equals("addition")) {
+            realNumberRes = realNumber1 + realNumber2;
+            imagineNumberRes = imagineNumber1 + imagineNumber2;
+        }
+        if (nameOfOperation.equals("subtraction")) {
+            realNumberRes = realNumber1 - realNumber2;
+            imagineNumberRes = imagineNumber1 - imagineNumber2;
+        }
+        if (nameOfOperation.equals("multiplication")) {
+            realNumberRes = realNumber1 * realNumber2 - imagineNumber1 * imagineNumber2;
+            imagineNumberRes = realNumber1 * imagineNumber2 + imagineNumber1 * realNumber2;
+        }
+        if (nameOfOperation.equals("division")) {
+            realNumberRes = (realNumber1 * realNumber2 + imagineNumber1 * imagineNumber2)/(realNumber2*realNumber2 + imagineNumber2* imagineNumber2);
+            imagineNumberRes = (imagineNumber1 * realNumber2- realNumber1* imagineNumber2)/(realNumber2*realNumber2 + imagineNumber2* imagineNumber2);
+        }
+
+        if (imagineNumberRes > 0){
+            res.append(realNumberRes);
+            res.append("+");
+            res.append(imagineNumberRes);
+            res.append("i");
+        }
+        if (imagineNumberRes < 0){
+            res.append(realNumberRes);
+            res.append(imagineNumberRes);
+            res.append("i");
+        }
+        if (imagineNumberRes == 0){
+            res.append(realNumberRes);
+        }
+        return res.toString();
     }
 }
