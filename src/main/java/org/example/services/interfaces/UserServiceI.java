@@ -1,7 +1,4 @@
-package org.example.services;
-
-import org.example.enums.ComplexOperations;
-import org.springframework.web.bind.annotation.RequestParam;
+package org.example.services.interfaces;
 
 public interface UserServiceI {
     String reversedWord(String inputReversible);

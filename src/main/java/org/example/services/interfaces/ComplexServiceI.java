@@ -1,4 +1,4 @@
-package org.example.services;
+package org.example.services.interfaces;
 
 import org.example.enums.ComplexOperations;
 

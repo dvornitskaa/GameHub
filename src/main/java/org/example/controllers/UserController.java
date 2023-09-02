@@ -1,19 +1,10 @@
 package org.example.controllers;
 
-import org.example.enums.ComplexOperations;
-import org.example.services.UserService;
-import org.example.services.UserServiceI;
+import org.example.services.interfaces.UserServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 @Controller
 //@Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)

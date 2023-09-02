@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Casino</title>
+</head>
+<body>
+<h1>Казино</h1>
+<div>
+    Удача в вашем кармане, только на нашем экране!
+</div>
+<br>
+<div>
+   Ваш баланс <span th:text="${deposit}"></span>
+</div>
+<br>
+<form action="/bet" method="post">
+    <input type="number" name="betSize" placeholder="Делайте ваши ставки" step="50">
+    <button type="submit" name="submitButton" value="RED" style="background-color: red; color: white;">red</button>
+    <button type="submit" name="submitButton" value="BLACK" style="background-color: black; color: white;">black</button>
+    <button type="submit" name="submitButton" value="EVEN">Чётные</button>
+    <button type="submit" name="submitButton" value="ODD">Нечётные</button>
+    <p><br></p>
+    <button type="submit" name="submitButton" value="ZERO" style="background-color: green; color: white;">zero</button>
+    <p><br></p>
+    <input type="number" name="`cellNumber`" placeholder="Введите число от 1 до 36" step="1" style="width: 200px;">
+    <button type="submit" name="submitButton" value="NUMBER">Cтавка на число</button>
+
+</form>
+<div>
+    <span th:text="${resultOfBet}"></span>
+</div>
+
+</body>
+</html>

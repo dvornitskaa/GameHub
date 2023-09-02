@@ -1,10 +1,11 @@
 package org.example.services;
 
 import org.example.enums.ComplexOperations;
+import org.example.services.interfaces.ComplexServiceI;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ComplexService implements ComplexServiceI{
+public class ComplexService implements ComplexServiceI {
     public String arithmeticOperationWithComplexNumbers(Double realNumber1, Double imagineNumber1, Double realNumber2, Double imagineNumber2, ComplexOperations nameOfOperation) {
         StringBuilder res = new StringBuilder("");
         Double realNumberRes = 0.0;
