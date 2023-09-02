@@ -1,5 +1,6 @@
 package org.example.controllers;
 
+import org.example.dto.CasinoDto;
 import org.example.enums.TypesOfBets;
 import org.example.services.interfaces.CasinoServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +15,13 @@ public class CasinoController {
     private CasinoServiceI casinoService;
     @GetMapping("/casino")
     public String casino(Model model){
-        model.addAttribute("deposit", casinoService.getDeposit());
+        model.addAttribute("casinoInfo", new CasinoDto(casinoService.getDeposit()));
         return "casino";
     }
     @PostMapping("/bet")
     public String bet(Integer betSize, TypesOfBets submitButton, Integer cellNumber, Model model) {
         String resultOfBet = casinoService.makeBet(betSize,  submitButton,  cellNumber);
-        model.addAttribute("resultOfBet", resultOfBet);
-        model.addAttribute("deposit", casinoService.getDeposit());
+        model.addAttribute("casinoInfo", new CasinoDto(casinoService.getDeposit(),resultOfBet));
         return "casino";
     }
 

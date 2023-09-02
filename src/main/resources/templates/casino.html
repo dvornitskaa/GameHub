@@ -11,7 +11,7 @@
 </div>
 <br>
 <div>
-   Ваш баланс <span th:text="${deposit}"></span>
+   Ваш баланс <span th:text="${casinoInfo.deposit}"></span>
 </div>
 <br>
 <form action="/bet" method="post">
@@ -28,7 +28,7 @@
 
 </form>
 <div>
-    <span th:text="${resultOfBet}"></span>
+    <span th:text="${casinoInfo.betResult}"></span>
 </div>
 
 </body>
