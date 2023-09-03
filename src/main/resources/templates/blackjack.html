@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blackjack</title>
+</head>
+<body>
+<h1>Blackjack</h1>
+<br>
+<div>
+    Your account <span th:text="${blackjackInfo.getDeposit()}"></span>
+</div>
+<form th:action="@{/round/{id}(id=${blackjackInfo.getId()})}" method="post">
+    <input type="number" name="betSize" placeholder="Ladies and gentlemen, place your bets" step="50" style="width: 300px;">
+    <button type="submit" name="submitButton" value="STARTGAME">start a game</button>
+</form>
+</body>
+</html>
