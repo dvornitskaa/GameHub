@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -15,13 +16,13 @@ public class CasinoController {
     private CasinoServiceI casinoService;
     @GetMapping("/casino")
     public String casino(Model model){
-        model.addAttribute("casinoInfo", new CasinoDto(casinoService.getDeposit()));
+        model.addAttribute("casinoInfo", casinoService.createCasino());
         return "casino";
     }
-    @PostMapping("/bet")
-    public String bet(Integer betSize, TypesOfBets submitButton, Integer cellNumber, Model model) {
-        String resultOfBet = casinoService.makeBet(betSize,  submitButton,  cellNumber);
-        model.addAttribute("casinoInfo", new CasinoDto(casinoService.getDeposit(),resultOfBet));
+    @PostMapping("/bet/{id}")
+    public String bet(@PathVariable Integer id, Integer betSize, TypesOfBets submitButton, Integer cellNumber, Model model) {
+        CasinoDto casinoDto = casinoService.makeBet(betSize,  submitButton,  cellNumber, id);
+        model.addAttribute("casinoInfo", casinoDto);
         return "casino";
     }
 

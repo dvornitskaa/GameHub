@@ -11,10 +11,10 @@
 </div>
 <br>
 <div>
-   Ваш баланс <span th:text="${casinoInfo.deposit}"></span>
+   Ваш баланс <span th:text="${casinoInfo.getDeposit()}"></span>
 </div>
 <br>
-<form action="/bet" method="post">
+<form th:action="@{/bet/{id}(id=${casinoInfo.getId()})}" method="post">
     <input type="number" name="betSize" placeholder="Делайте ваши ставки" step="50">
     <button type="submit" name="submitButton" value="RED" style="background-color: red; color: white;">red</button>
     <button type="submit" name="submitButton" value="BLACK" style="background-color: black; color: white;">black</button>
@@ -28,7 +28,7 @@
 
 </form>
 <div>
-    <span th:text="${casinoInfo.betResult}"></span>
+    <span th:text="${casinoInfo.getBetResult()}"></span>
 </div>
 <a th:href="@{/}">Вернуться назад</a>
 </body>

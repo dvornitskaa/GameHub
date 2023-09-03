@@ -1,9 +1,11 @@
 package org.example.services.interfaces;
 
+import org.example.dto.CasinoDto;
 import org.example.enums.TypesOfBets;
 
 public interface CasinoServiceI {
-    Integer getDeposit();
 
-    String makeBet(Integer betSize, TypesOfBets typesOfBets, Integer cellNumber);
+    CasinoDto makeBet(Integer betSize, TypesOfBets typesOfBets, Integer cellNumber, Integer id);
+    CasinoDto createCasino();
+
 }

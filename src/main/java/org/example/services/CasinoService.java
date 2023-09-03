@@ -1,7 +1,11 @@
 package org.example.services;
 
+import org.example.dto.CasinoDto;
+import org.example.entities.Casino;
 import org.example.enums.TypesOfBets;
+import org.example.repositories.CasinoRepository;
 import org.example.services.interfaces.CasinoServiceI;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -11,17 +15,18 @@ public class CasinoService implements CasinoServiceI {
     private Integer deposit;
     @Value("${cellsAmount}")
     private Integer cellsAmount;
+    @Autowired
+    private CasinoRepository casinoRepository;
 
-    public Integer getDeposit() {
-        return deposit;
-    }
 
     @Override
-    public String makeBet(Integer betSize, TypesOfBets typesOfBets, Integer cellNumber) {
+    public CasinoDto makeBet(Integer betSize, TypesOfBets typesOfBets, Integer cellNumber, Integer id) {
         StringBuilder res = new StringBuilder("");
         Integer randomNumber = (int) (Math.random() * cellsAmount);
+        Casino casino = casinoRepository.findById(id).get();
         int win = 0;
-        if (deposit >= betSize) {
+        int deposit = casino.getDeposit();
+        if (deposit >= betSize && betSize > 0) {
             switch (typesOfBets) {
                 case ZERO -> {
                     if (randomNumber == 0) {
@@ -72,14 +77,23 @@ public class CasinoService implements CasinoServiceI {
                     }
                 }
             }
-        }else {
+        } else {
             res.append("на вашем балансе недостаточно средств");
         }
         if (deposit == 0) {
             res.append(", НУ ТЫ ЛОХ");
         }
-        return res.toString();
+        casino.setDeposit(deposit);
+        casinoRepository.save(casino);
+        return new CasinoDto(id, deposit, res.toString());
 
+    }
+
+    @Override
+    public CasinoDto createCasino() {
+        Casino casino = new Casino(deposit);
+        Integer id = casinoRepository.save(casino).getId();
+        return new CasinoDto(id, deposit);
     }
 
 }
