@@ -10,19 +10,15 @@ import java.util.List;
 @Data //getter
 @AllArgsConstructor
 @NoArgsConstructor
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class BlackjackDto {
     @NonNull
     Integer id;
     @NonNull
     Integer deposit;
-    @NonNull
     List<Deck> usersCards;
-    @NonNull
     List<Deck> dealersCards;
-    public BlackjackDto(Integer id, Integer deposit) {
-        this.id = id;
-        this.deposit = deposit;
-    }
+    String message;
+
 }

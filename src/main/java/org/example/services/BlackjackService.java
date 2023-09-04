@@ -19,6 +19,10 @@ import java.util.Random;
 public class BlackjackService implements BlackjackServiceI {
     @Value("${deposit}")
     private Integer deposit;
+    @Value("${twentyOne}")
+    private Integer twentyOne;
+    @Value("${aceValue}")
+    private Integer aceValue;
     @Autowired
     private BlackjackRepository blackjackRepository;
     List<Deck> deckList = new ArrayList<>();
@@ -32,10 +36,10 @@ public class BlackjackService implements BlackjackServiceI {
 
     @Override
     public BlackjackDto playRound(Integer betSize, Integer id) {
-        List<Deck> usersCards = new ArrayList<>();
-        List<Deck> dealersCards = new ArrayList<>();
-
         BlackjackUser blackjackUser = blackjackRepository.findById(id).get();
+        List<Deck> usersCards = blackjackUser.getUsersCards();
+        List<Deck> dealersCards = blackjackUser.getDealersCards();
+
         int deposit = blackjackUser.getDeposit();
         // Добавляем все элементы перечисления Deck в список
         for (Deck card : Deck.values()) {
@@ -52,8 +56,8 @@ public class BlackjackService implements BlackjackServiceI {
                 deckList.remove(randomIndex);
             }
 
-            // Добавляем по две случайные карты в dealersCards и удаляем их из deckList
-            for (int i = 0; i < 2; i++) {
+            // Добавляем 1 случайные карты в dealersCards и удаляем их из deckList
+            for (int i = 0; i < 1; i++) {
                 int randomIndex = random.nextInt(deckList.size());
                 Deck dealerCard = deckList.get(randomIndex);
                 dealersCards.add(dealerCard);
@@ -61,10 +65,10 @@ public class BlackjackService implements BlackjackServiceI {
             }
         }
         blackjackUser.setDeposit(deposit);
-        blackjackUser.setUsersCards(usersCards);
-        blackjackUser.setDealersCards(dealersCards);
+//        blackjackUser.setUsersCards(usersCards);
+//        blackjackUser.setDealersCards(dealersCards);
         blackjackRepository.save(blackjackUser);
-        return new BlackjackDto(id, deposit, usersCards, dealersCards);
+        return new BlackjackDto(id, deposit, usersCards, dealersCards, "");
 
     }
 
@@ -88,7 +92,87 @@ public class BlackjackService implements BlackjackServiceI {
         }
 
         // Здесь можно вернуть какой-то результат, например, обновленный BlackjackDto
-        return new BlackjackDto(id, blackjackUser.getDeposit(), blackjackUser.getUsersCards(), blackjackUser.getDealersCards());
+        return new BlackjackDto(id, blackjackUser.getDeposit(), blackjackUser.getUsersCards(), blackjackUser.getDealersCards(), "");
+    }
+
+    @Override
+    public BlackjackDto stand(Integer id, Integer betSize) {
+        BlackjackUser blackjackUser = blackjackRepository.findById(id).orElse(null);
+        int usersSum = 0;
+        //assert blackjackUser != null;
+        int deposit = blackjackUser.getDeposit();
+        StringBuilder message = new StringBuilder();
+        boolean ace = false;
+        boolean aceInDealerHand = false;
+        boolean failureBeforeDealersTurn = false;
+        for (Deck card : blackjackUser.getUsersCards()) {
+            usersSum += card.getNumericValue();
+            if (card.getNumericValue() == aceValue) {
+                ace = true;
+            }
+            if (ace && usersSum > twentyOne) {
+                usersSum -= (aceValue - 1);
+            }
+        }
+
+        //blackjackRepository.save(blackjackUser);
+        int dealerSum = blackjackUser.getDealersCards().get(0).getNumericValue();
+        if (usersSum <= twentyOne) {
+            //дальше играем за диллерв
+            while (dealerSum < 17) {
+                Random random = new Random();
+                int randomIndex = random.nextInt(deckList.size());
+                Deck dealerCard = deckList.get(randomIndex);
+                blackjackUser.getDealersCards().add(dealerCard);
+                deckList.remove(randomIndex);
+                dealerSum += dealerCard.getNumericValue();
+                if (dealerCard.getNumericValue() == aceValue) {
+                    aceInDealerHand = true;
+                }
+                if (aceInDealerHand && dealerSum > twentyOne) {
+                    usersSum -= (aceValue - 1);
+                }
+            }
+            //blackjackRepository.save(blackjackUser);
+
+        } else {
+            deposit -= betSize;
+            message.append("bust, you lose");
+            blackjackUser.setMessage(message.toString());
+            blackjackRepository.save(blackjackUser);
+            return new BlackjackDto(id, deposit, blackjackUser.getUsersCards(), blackjackUser.getDealersCards(), blackjackUser.getMessage());
+        }
+        // проверка кто победил
+        if (dealerSum > twentyOne) {
+            deposit += betSize * 3 / 2;
+            message.append("you won ");
+        }
+
+        if (usersSum == twentyOne && dealerSum == twentyOne) {
+            if (blackjackUser.getDealersCards().size() == 2 && blackjackUser.getUsersCards().size() != 2) {
+                deposit -= betSize;
+                message.append("you lose ");
+            } else if (blackjackUser.getDealersCards().size() != 2 && blackjackUser.getUsersCards().size() == 2) {
+                deposit += betSize * 3 / 2;
+                message.append("you won ");
+            } else {
+                message.append("draw ");
+            }
+            if (blackjackUser.getUsersCards().size() == 2) {
+                message.append("you got Blackjack");
+            }
+        }
+        if (usersSum > dealerSum) {
+            deposit += betSize * 3 / 2;
+            message.append("you won ");
+        }
+        if (usersSum == dealerSum) {
+            message.append("draw ");
+        }
+
+        blackjackUser.setMessage(message.toString());
+        blackjackRepository.save(blackjackUser);
+        return new BlackjackDto(id, deposit, blackjackUser.getUsersCards(), blackjackUser.getDealersCards(), blackjackUser.getMessage());
     }
 
 }

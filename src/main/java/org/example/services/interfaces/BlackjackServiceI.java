@@ -8,4 +8,5 @@ public interface BlackjackServiceI {
     BlackjackDto createBlackjack();
     BlackjackDto playRound(Integer betSize, Integer id);
     BlackjackDto hit(Integer id);
+    BlackjackDto stand(Integer id,Integer betSize);
 }

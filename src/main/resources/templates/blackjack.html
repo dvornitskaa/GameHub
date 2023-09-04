@@ -17,18 +17,35 @@
 <br>
 <div>
     Hand:
-    <span th:each="card : ${blackjackInfo.usersCards}" th:text="${card}"></span>
+    <span th:each="card, iterStat : ${blackjackInfo.usersCards}">
+        <span th:text="${card}"></span>
+        <!-- Добавляем пробел после каждой карты, кроме последней -->
+        <span th:if="${!iterStat.last}"> </span>
+    </span>
 </div>
+
 
 <br>
 <div th:if="${not #lists.isEmpty(blackjackInfo.dealersCards)}">
     Dealers cards:
-    <span th:each="card : ${blackjackInfo.dealersCards}" th:text="${card}"></span>
+    <span th:each="card, iterStat : ${blackjackInfo.dealersCards}">
+        <span th:text="${card}"></span>
+        <!-- Добавляем пробел после каждой карты, кроме последней -->
+        <span th:if="${!iterStat.last}"> </span>
+    </span>
 </div>
+
 
 <form th:action="@{/hitMove/{id}(id=${blackjackInfo.getId()})}" method="post">
     <button type="submit" name="submitButton" value="HIT">Hit</button>
 </form>
+<form th:action="@{/standMove/{id}(id=${blackjackInfo.getId()})}" method="post">
+    <button type="submit" name="submitButton" value="STAND">Stand</button>
+</form>
+
+<div>
+    <span th:text="${blackjackInfo.getMessage()}"></span>
+</div>
 
 </body>
 </html>
