@@ -14,5 +14,21 @@
     <input type="number" name="betSize" placeholder="Ladies and gentlemen, place your bets" step="50" style="width: 300px;">
     <button type="submit" name="submitButton" value="STARTGAME">start a game</button>
 </form>
+<br>
+<div>
+    Hand:
+    <span th:each="card : ${blackjackInfo.usersCards}" th:text="${card}"></span>
+</div>
+
+<br>
+<div th:if="${not #lists.isEmpty(blackjackInfo.dealersCards)}">
+    Dealers cards:
+    <span th:each="card : ${blackjackInfo.dealersCards}" th:text="${card}"></span>
+</div>
+
+<form th:action="@{/hitMove/{id}(id=${blackjackInfo.getId()})}" method="post">
+    <button type="submit" name="submitButton" value="HIT">Hit</button>
+</form>
+
 </body>
 </html>
