@@ -22,6 +22,7 @@ public class BlackjackUser {
     Integer id;
     @NonNull
     Integer deposit;
+    Integer betSize;
     List<Deck> usersCards = new ArrayList<>();
     List<Deck> dealersCards = new ArrayList<>();
     String message;

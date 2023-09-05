@@ -38,8 +38,8 @@ public class BlackjackController {
         return "blackjack";
     }
     @PostMapping("/standMove/{id}")
-    public String standMove(@PathVariable Integer id, Integer betSize, Model model) {
-        BlackjackDto blackjackDto = blackjackService.stand(id,betSize);
+    public String standMove(@PathVariable Integer id, Model model) {
+        BlackjackDto blackjackDto = blackjackService.stand(id);
         model.addAttribute("blackjackInfo", blackjackDto);
         return "blackjack";
     }

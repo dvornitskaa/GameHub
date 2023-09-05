@@ -38,7 +38,9 @@ public class BlackjackService implements BlackjackServiceI {
     public BlackjackDto playRound(Integer betSize, Integer id) {
         BlackjackUser blackjackUser = blackjackRepository.findById(id).get();
         List<Deck> usersCards = blackjackUser.getUsersCards();
+        usersCards.clear();
         List<Deck> dealersCards = blackjackUser.getDealersCards();
+        dealersCards.clear();
 
         int deposit = blackjackUser.getDeposit();
         // Добавляем все элементы перечисления Deck в список
@@ -65,10 +67,11 @@ public class BlackjackService implements BlackjackServiceI {
             }
         }
         blackjackUser.setDeposit(deposit);
+        blackjackUser.setBetSize(betSize);
 //        blackjackUser.setUsersCards(usersCards);
 //        blackjackUser.setDealersCards(dealersCards);
         blackjackRepository.save(blackjackUser);
-        return new BlackjackDto(id, deposit, usersCards, dealersCards, "");
+        return new BlackjackDto(id, deposit, betSize, usersCards, dealersCards, "");
 
     }
 
@@ -92,19 +95,19 @@ public class BlackjackService implements BlackjackServiceI {
         }
 
         // Здесь можно вернуть какой-то результат, например, обновленный BlackjackDto
-        return new BlackjackDto(id, blackjackUser.getDeposit(), blackjackUser.getUsersCards(), blackjackUser.getDealersCards(), "");
+        return new BlackjackDto(id, blackjackUser.getDeposit(), blackjackUser.getBetSize(), blackjackUser.getUsersCards(), blackjackUser.getDealersCards(), "");
     }
 
     @Override
-    public BlackjackDto stand(Integer id, Integer betSize) {
-        BlackjackUser blackjackUser = blackjackRepository.findById(id).orElse(null);
+    public BlackjackDto stand(Integer id) {
+        BlackjackUser blackjackUser = blackjackRepository.findById(id).get();
         int usersSum = 0;
+        int betSize = blackjackUser.getBetSize();
         //assert blackjackUser != null;
         int deposit = blackjackUser.getDeposit();
         StringBuilder message = new StringBuilder();
         boolean ace = false;
         boolean aceInDealerHand = false;
-        boolean failureBeforeDealersTurn = false;
         for (Deck card : blackjackUser.getUsersCards()) {
             usersSum += card.getNumericValue();
             if (card.getNumericValue() == aceValue) {
@@ -140,7 +143,7 @@ public class BlackjackService implements BlackjackServiceI {
             message.append("bust, you lose");
             blackjackUser.setMessage(message.toString());
             blackjackRepository.save(blackjackUser);
-            return new BlackjackDto(id, deposit, blackjackUser.getUsersCards(), blackjackUser.getDealersCards(), blackjackUser.getMessage());
+            return new BlackjackDto(id, deposit, betSize, blackjackUser.getUsersCards(), blackjackUser.getDealersCards(), blackjackUser.getMessage());
         }
         // проверка кто победил
         if (dealerSum > twentyOne) {
@@ -169,10 +172,15 @@ public class BlackjackService implements BlackjackServiceI {
         if (usersSum == dealerSum) {
             message.append("draw ");
         }
+        if (usersSum < dealerSum) {
+            deposit -= betSize;
+            message.append("you lose ");
+        }
 
         blackjackUser.setMessage(message.toString());
+        blackjackUser.setDeposit(deposit);
         blackjackRepository.save(blackjackUser);
-        return new BlackjackDto(id, deposit, blackjackUser.getUsersCards(), blackjackUser.getDealersCards(), blackjackUser.getMessage());
+        return new BlackjackDto(id, deposit, betSize, blackjackUser.getUsersCards(), blackjackUser.getDealersCards(), blackjackUser.getMessage());
     }
 
 }

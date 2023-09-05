@@ -17,6 +17,7 @@ public class BlackjackDto {
     Integer id;
     @NonNull
     Integer deposit;
+    Integer betSize;
     List<Deck> usersCards;
     List<Deck> dealersCards;
     String message;
