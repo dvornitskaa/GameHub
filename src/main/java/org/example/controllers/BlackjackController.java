@@ -20,6 +20,9 @@ public class BlackjackController {
     @GetMapping("/blackjack")
     public String blackjack(Model model) {
         model.addAttribute("blackjackInfo", blackjackService.createBlackjack());
+        model.addAttribute("deposits", blackjackService.getDeposits());
+        model.addAttribute("maxDeposit", blackjackService.getMaxDeposit());
+
         return "blackjack";
     }
 
@@ -28,6 +31,8 @@ public class BlackjackController {
     public String round(@PathVariable Integer id, Integer betSize, Model model) {
         BlackjackDto blackjackDto = blackjackService.playRound(betSize, id);
         model.addAttribute("blackjackInfo", blackjackDto);
+        model.addAttribute("deposits", blackjackService.getDeposits());
+        model.addAttribute("maxDeposit", blackjackService.getMaxDeposit());
         return "blackjack";
     }
 
@@ -35,12 +40,17 @@ public class BlackjackController {
     public String hitMove(@PathVariable Integer id, Model model) {
         BlackjackDto blackjackDto = blackjackService.hit(id);
         model.addAttribute("blackjackInfo", blackjackDto);
+        model.addAttribute("deposits", blackjackService.getDeposits());
+        model.addAttribute("maxDeposit", blackjackService.getMaxDeposit());
         return "blackjack";
     }
     @PostMapping("/standMove/{id}")
     public String standMove(@PathVariable Integer id, Model model) {
         BlackjackDto blackjackDto = blackjackService.stand(id);
         model.addAttribute("blackjackInfo", blackjackDto);
+        model.addAttribute("deposits", blackjackService.getDeposits());
+        model.addAttribute("maxDeposit", blackjackService.getMaxDeposit());
         return "blackjack";
     }
+
 }

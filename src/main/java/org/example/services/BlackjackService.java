@@ -9,11 +9,13 @@ import org.example.repositories.BlackjackRepository;
 import org.example.services.interfaces.BlackjackServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 public class BlackjackService implements BlackjackServiceI {
@@ -172,7 +174,7 @@ public class BlackjackService implements BlackjackServiceI {
         if (usersSum == dealerSum) {
             message.append("draw ");
         }
-        if (usersSum < dealerSum) {
+        if (usersSum < dealerSum && dealerSum <= twentyOne) {
             deposit -= betSize;
             message.append("you lose ");
         }
@@ -181,6 +183,16 @@ public class BlackjackService implements BlackjackServiceI {
         blackjackUser.setDeposit(deposit);
         blackjackRepository.save(blackjackUser);
         return new BlackjackDto(id, deposit, betSize, blackjackUser.getUsersCards(), blackjackUser.getDealersCards(), blackjackUser.getMessage());
+    }
+    @Override
+    public List<Integer> getDeposits(){
+      //  return blackjackRepository.findAll().stream().map(BlackjackUser::getDeposit).collect(Collectors.toList());
+        return blackjackRepository.getAllDeposits();
+    }
+
+    @Override
+    public Integer getMaxDeposit() {
+        return blackjackRepository.getMaxDeposit();
     }
 
 }
