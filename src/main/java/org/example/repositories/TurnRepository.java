@@ -15,4 +15,8 @@ public interface TurnRepository extends JpaRepository<Turn, Integer> {
     List<TurnDto>getAllBetsAndResults();
     @Query(value = "select (COUNT(CASE WHEN result = 'win' THEN 1 ELSE NULL END) * 1.0) / COUNT(*) AS win_coefficient from turns", nativeQuery = true)
     double getWinCoefficient();
+    @Query(value = "select MAX(COMBO_COEFFICIENT) from turns", nativeQuery = true)
+    int getMaxCoefficient();
+    @Query(value = "select MAX(WIN_SUM) from turns", nativeQuery = true)
+    int getMaxWinSum();
 }

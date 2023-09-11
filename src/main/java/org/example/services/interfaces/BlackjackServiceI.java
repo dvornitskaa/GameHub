@@ -18,4 +18,6 @@ public interface BlackjackServiceI {
     BlackjackDto evenOddCheck(Integer betSize, String submitButton,Integer id);
     List<TurnDto> getAllBetsAndResults();
     double getWinCoefficient();
+    int getMaxCoefficient();
+    int getMaxWinSum();
 }

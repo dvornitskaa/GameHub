@@ -207,42 +207,56 @@ public class BlackjackService implements BlackjackServiceI {
 
         Turn turn = new Turn(blackjackUser, betSize);
         Integer deposit = blackjackUser.getDeposit();
-        String betRes="";
+        String betRes = "";
         Random random = new Random();
+        int coefficient = 0;
+        int winSum = 0;
+        turnRepository.save(turn);
+        if (turn.getId() != 1) {
+            coefficient = turnRepository.findById(turn.getId() - 1).get().getComboCoefficient();
+        }
 
         // Генерируем первое случайное число от 1 до 6
         int firstDiceNumber = random.nextInt(6) + 1;
 
         // Генерируем второе случайное число от 1 до 6
-        int secondDiceNumber= random.nextInt(6) + 1;
-        int sum= firstDiceNumber + secondDiceNumber;
-        if(betSize>0 && betSize<=deposit) {
+        int secondDiceNumber = random.nextInt(6) + 1;
+        int sum = firstDiceNumber + secondDiceNumber;
+        if (betSize > 0 && betSize <= deposit) {
             switch (submitButton) {
                 case "EVEN" -> {
                     if (sum % 2 == 0) {
-                        deposit += betSize;
+                        deposit += (betSize + betSize * coefficient);
+                        winSum = (betSize + betSize * coefficient);
                         betRes = "win";
+                        coefficient += 1;
                     } else {
                         deposit -= betSize;
                         betRes = "loss";
+                        coefficient = 0;
                     }
                 }
                 case "ODD" -> {
                     if (sum % 2 == 1) {
-                        deposit += betSize;
+                        deposit += (betSize + betSize * coefficient);
+                        winSum = (betSize + betSize * coefficient);
                         betRes = "win";
+                        coefficient += 1;
                     } else {
                         deposit -= betSize;
                         betRes = "loss";
+                        coefficient = 0;
                     }
                 }
             }
         }
         turn.setResult(betRes);
+        turn.setWinSum(winSum);
+        turn.setComboCoefficient(coefficient);
         blackjackUser.setDeposit(deposit);
         blackjackUser.setBetSize(betSize);
         blackjackRepository.save(blackjackUser);
-        turnRepository.save(turn);
+        //turnRepository.save(turn);
         return new BlackjackDto(id, deposit, betSize, betRes, firstDiceNumber, secondDiceNumber);
     }
 
@@ -254,6 +268,16 @@ public class BlackjackService implements BlackjackServiceI {
     @Override
     public double getWinCoefficient() {
         return turnRepository.getWinCoefficient();
+    }
+
+    @Override
+    public int getMaxCoefficient() {
+        return turnRepository.getMaxCoefficient();
+    }
+
+    @Override
+    public int getMaxWinSum() {
+        return turnRepository.getMaxWinSum();
     }
 
 

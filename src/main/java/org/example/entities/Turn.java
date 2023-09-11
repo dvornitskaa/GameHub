@@ -21,7 +21,8 @@ public class Turn {
     BlackjackUser blackjackUser;
     Integer betSize;
     String result;
-
+    Integer comboCoefficient;
+    Integer winSum;
     public Turn(BlackjackUser blackjackUser, Integer betSize) {
         this.blackjackUser = blackjackUser;
         this.betSize = betSize;
