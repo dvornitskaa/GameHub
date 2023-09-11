@@ -54,6 +54,22 @@
 <div>
     <span th:text="${blackjackInfo.getMessage()}"></span>
 </div>
+<form th:action="@{/evenOdd/{id}(id=${blackjackInfo.getId()})}" method="post">
+    <input type="number" name="betSize" placeholder="Ladies and gentlemen, place your bets" step="50" style="width: 300px;">
+    <button type="submit" name="submitButton" value="EVEN">EVEN</button>
+    <button type="submit" name="submitButton" value="ODD">ODD</button>
+</form>
+<br>
+<div>
+    <span th:text="${blackjackInfo.getFirstDiceNumber()}"></span>
+     <span th:text="${blackjackInfo.getSecondDiceNumber()}"></span>
+</div>
+<br>
+<div>
+    <span th:text="${turnInfo}"></span>
+</div>
+<div>
+    Win coefficient <span th:text="${winCoefficient}"></span>
 </div>
 <a th:href="@{/}">Go back to main page</a>
 

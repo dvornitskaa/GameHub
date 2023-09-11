@@ -1,6 +1,7 @@
 package org.example.controllers;
 
 import org.example.dto.BlackjackDto;
+import org.example.dto.TurnDto;
 import org.example.enums.TypesOfBets;
 import org.example.services.interfaces.BlackjackServiceI;
 import org.example.services.interfaces.CasinoServiceI;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 @Controller
 public class BlackjackController {
@@ -50,6 +53,17 @@ public class BlackjackController {
         model.addAttribute("blackjackInfo", blackjackDto);
         model.addAttribute("deposits", blackjackService.getDeposits());
         model.addAttribute("maxDeposit", blackjackService.getMaxDeposit());
+        return "blackjack";
+    }
+    @PostMapping("/evenOdd/{id}")
+    public String evenOdd(@PathVariable Integer id, String submitButton,Integer betSize, Model model) {
+        BlackjackDto blackjackDto = blackjackService.evenOddCheck(id, submitButton, betSize);
+        model.addAttribute("blackjackInfo", blackjackDto);
+        model.addAttribute("deposits", blackjackService.getDeposits());
+        model.addAttribute("maxDeposit", blackjackService.getMaxDeposit());
+        //model.addAttribute("turnInfo", blackjackService.getAllBetsAndResults());
+        model.addAttribute("winCoefficient", blackjackService.getWinCoefficient());
+
         return "blackjack";
     }
 

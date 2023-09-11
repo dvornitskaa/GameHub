@@ -2,10 +2,13 @@ package org.example.services;
 
 import org.example.dto.BlackjackDto;
 import org.example.dto.CasinoDto;
+import org.example.dto.TurnDto;
 import org.example.entities.BlackjackUser;
 import org.example.entities.Casino;
+import org.example.entities.Turn;
 import org.example.enums.Deck;
 import org.example.repositories.BlackjackRepository;
+import org.example.repositories.TurnRepository;
 import org.example.services.interfaces.BlackjackServiceI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +30,8 @@ public class BlackjackService implements BlackjackServiceI {
     private Integer aceValue;
     @Autowired
     private BlackjackRepository blackjackRepository;
+    @Autowired
+    private TurnRepository turnRepository;
     List<Deck> deckList = new ArrayList<>();
 
     @Override
@@ -184,9 +189,10 @@ public class BlackjackService implements BlackjackServiceI {
         blackjackRepository.save(blackjackUser);
         return new BlackjackDto(id, deposit, betSize, blackjackUser.getUsersCards(), blackjackUser.getDealersCards(), blackjackUser.getMessage());
     }
+
     @Override
-    public List<Integer> getDeposits(){
-      //  return blackjackRepository.findAll().stream().map(BlackjackUser::getDeposit).collect(Collectors.toList());
+    public List<Integer> getDeposits() {
+        //  return blackjackRepository.findAll().stream().map(BlackjackUser::getDeposit).collect(Collectors.toList());
         return blackjackRepository.getAllDeposits();
     }
 
@@ -194,5 +200,61 @@ public class BlackjackService implements BlackjackServiceI {
     public Integer getMaxDeposit() {
         return blackjackRepository.getMaxDeposit();
     }
+
+    @Override
+    public BlackjackDto evenOddCheck(Integer id, String submitButton, Integer betSize) {
+        BlackjackUser blackjackUser = blackjackRepository.findById(id).get();
+
+        Turn turn = new Turn(blackjackUser, betSize);
+        Integer deposit = blackjackUser.getDeposit();
+        String betRes="";
+        Random random = new Random();
+
+        // Генерируем первое случайное число от 1 до 6
+        int firstDiceNumber = random.nextInt(6) + 1;
+
+        // Генерируем второе случайное число от 1 до 6
+        int secondDiceNumber= random.nextInt(6) + 1;
+        int sum= firstDiceNumber + secondDiceNumber;
+        if(betSize>0 && betSize<=deposit) {
+            switch (submitButton) {
+                case "EVEN" -> {
+                    if (sum % 2 == 0) {
+                        deposit += betSize;
+                        betRes = "win";
+                    } else {
+                        deposit -= betSize;
+                        betRes = "loss";
+                    }
+                }
+                case "ODD" -> {
+                    if (sum % 2 == 1) {
+                        deposit += betSize;
+                        betRes = "win";
+                    } else {
+                        deposit -= betSize;
+                        betRes = "loss";
+                    }
+                }
+            }
+        }
+        turn.setResult(betRes);
+        blackjackUser.setDeposit(deposit);
+        blackjackUser.setBetSize(betSize);
+        blackjackRepository.save(blackjackUser);
+        turnRepository.save(turn);
+        return new BlackjackDto(id, deposit, betSize, betRes, firstDiceNumber, secondDiceNumber);
+    }
+
+    @Override
+    public List<TurnDto> getAllBetsAndResults() {
+        return turnRepository.getAllBetsAndResults();
+    }
+
+    @Override
+    public double getWinCoefficient() {
+        return turnRepository.getWinCoefficient();
+    }
+
 
 }
