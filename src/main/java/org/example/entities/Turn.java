@@ -27,4 +27,5 @@ public class Turn {
         this.blackjackUser = blackjackUser;
         this.betSize = betSize;
     }
+
 }

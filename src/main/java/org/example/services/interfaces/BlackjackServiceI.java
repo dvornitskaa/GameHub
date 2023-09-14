@@ -16,7 +16,7 @@ public interface BlackjackServiceI {
     List<Integer> getDeposits ();
     Integer getMaxDeposit ();
     BlackjackDto evenOddCheck(Integer betSize, String submitButton,Integer id);
-    List<TurnDto> getAllBetsAndResults();
+    List<TurnDto> getAllBetsAndResults(Integer id);
     double getWinCoefficient();
     int getMaxCoefficient();
     int getMaxWinSum();

@@ -26,12 +26,15 @@ public class BlackjackUser {
     List<Deck> usersCards = new ArrayList<>();
     List<Deck> dealersCards = new ArrayList<>();
     String message;
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "blackjackUser")
+    List<Turn> turns = new ArrayList<>();
 //    public BlackjackUser(Integer deposit) {
 //        this.deposit = deposit;
 ////        this.usersCards = new ArrayList<>();
 ////        this.dealersCards = new ArrayList<>();
 //    }
-
 
 
 }

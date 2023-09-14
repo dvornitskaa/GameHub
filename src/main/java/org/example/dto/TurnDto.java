@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.example.entities.BlackjackUser;
+import org.example.entities.Turn;
+
+import java.util.List;
 
 @Data //getter
 //@AllArgsConstructor
@@ -16,10 +19,16 @@ public class TurnDto {
 //    @ManyToOne
 //    @JoinColumn(name="user_id", nullable=false)
 //    BlackjackUser blackjackUser;
-    Integer bet_Size;
+    Integer betSize;
     String result;
-    public TurnDto(int bet_Size, String result) {
-        this.bet_Size = bet_Size;
+    public TurnDto(int betSize, String result) {
+        this.betSize = betSize;
         this.result = result;
+    }
+
+    @Override
+    public String toString() {
+        return "betSize=" + betSize +
+                ", result='" + result ;
     }
 }

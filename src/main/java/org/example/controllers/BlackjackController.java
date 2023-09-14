@@ -61,7 +61,7 @@ public class BlackjackController {
         model.addAttribute("blackjackInfo", blackjackDto);
         model.addAttribute("deposits", blackjackService.getDeposits());
         model.addAttribute("maxDeposit", blackjackService.getMaxDeposit());
-        //model.addAttribute("turnInfo", blackjackService.getAllBetsAndResults());
+        model.addAttribute("turnInfo", blackjackService.getAllBetsAndResults(id));
         model.addAttribute("winCoefficient", blackjackService.getWinCoefficient());
         model.addAttribute("comboCoefficient", blackjackService.getMaxCoefficient());
         model.addAttribute("maxWin", blackjackService.getMaxWinSum());

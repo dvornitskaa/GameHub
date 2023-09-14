@@ -253,16 +253,28 @@ public class BlackjackService implements BlackjackServiceI {
         turn.setResult(betRes);
         turn.setWinSum(winSum);
         turn.setComboCoefficient(coefficient);
+        blackjackUser.getTurns().add(turn);
         blackjackUser.setDeposit(deposit);
         blackjackUser.setBetSize(betSize);
+        System.out.println(blackjackUser.getTurns());
         blackjackRepository.save(blackjackUser);
         //turnRepository.save(turn);
         return new BlackjackDto(id, deposit, betSize, betRes, firstDiceNumber, secondDiceNumber);
     }
 
     @Override
-    public List<TurnDto> getAllBetsAndResults() {
-        return turnRepository.getAllBetsAndResults();
+    public List<TurnDto> getAllBetsAndResults(Integer id) {
+        BlackjackUser blackjackUser = blackjackRepository.findById(id).get();
+        List <TurnDto> turnDtoList= new ArrayList<>();
+
+        for (Turn turn: blackjackUser.getTurns()) {
+            TurnDto turnDto = new TurnDto();
+            turnDto.setResult(turn.getResult());
+            turnDto.setBetSize(turn.getBetSize());
+            turnDtoList.add(turnDto);
+
+        }
+        return turnDtoList;
     }
 
     @Override
